@@ -3,337 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eu Vou! - 12ª Cruzada Evangelística</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <title>Eu Vou! - Crie sua Foto de Perfil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Colors from your image */
         :root {
-            --green-dark: #2E8B57; /* Estimated from top/bottom bands */
-            --orange-main: #FF8C00; /* Estimated from main background */
-            --yellow-text: #FFFF00; /* Estimated from "EU VOU!" */
+            --green-dark: #2A7D4E;
+            --orange-main: #FF8C00;
+            --orange-dark: #cc7000;
+            --yellow-text: #FFD700;
             --white-text: #FFFFFF;
+            --bg-gradient: linear-gradient(135deg, #2E8B57, #1e6b3f);
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --font-main: 'Montserrat', sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--green-dark);
+            font-family: var(--font-main);
+            background: var(--bg-gradient);
             color: var(--white-text);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+            padding: 2rem;
+            overflow-y: auto;
         }
 
         .container {
-            background-color: rgba(0, 0, 0, 0.3); /* Slight overlay for contrast */
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-            text-align: center;
-            max-width: 500px;
             width: 100%;
+            max-width: 550px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            animation: fadeIn 0.8s ease-out;
+            text-align: center;
         }
 
         h1 {
-            font-size: 2em;
-            margin-bottom: 15px;
-            color: var(--yellow-text);
-            line-height: 1.2; /* Adjust line height for better spacing */
+            font-size: 1.8em;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--white-text);
+            text-shadow: 0 2px 4px var(--shadow-color);
+            margin-bottom: 0.5rem;
         }
 
         h1 .highlight-text {
-            font-size: 1.3em; /* Make it slightly bigger */
-            font-weight: 700; /* Make it bolder */
-            display: block; /* Ensures it's on its own line */
-            margin-top: 5px; /* Small space between lines */
+            font-family: var(--font-main);
+            font-weight: 800;
+            font-size: 2.5em;
+            color: var(--yellow-text);
+            display: block;
+            margin-top: 0.25rem;
+            letter-spacing: 1px;
         }
-
-        p {
+        
+        .container > p {
             font-size: 1.1em;
-            margin-bottom: 25px;
-            line-height: 1.5;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .file-upload-wrapper {
+        .canvas-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 1.5rem auto;
             position: relative;
-            overflow: hidden;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        .file-upload-wrapper input[type="file"] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        /* Themed upload button */
-        .file-upload-button {
-            background-color: var(--yellow-text); /* Changed to yellow */
-            color: var(--green-dark); /* Changed to dark green */
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.2em;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .file-upload-button:hover {
-            background-color: #ffd700; /* Slightly darker yellow on hover */
         }
 
         canvas {
-            border: 2px solid var(--orange-main);
-            display: block;
-            margin: 20px auto;
-            max-width: 100%;
+            width: 100%;
             height: auto;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            cursor: grab; /* Indicate draggable */
+            border-radius: 8px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            cursor: grab;
+            display: block;
         }
-        canvas.dragging {
-            cursor: grabbing;
+        canvas.dragging { cursor: grabbing; }
+
+        #loading-section, #controls-section {
+            display: none;
+        }
+        
+        #upload-section {
+            display: flex;
+            justify-content: center;
         }
 
-        .controls {
-            margin-top: 15px;
+        .loader-container {
+            padding: 2rem 0;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--yellow-text);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem auto;
+        }
+
+        .controls-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .control-group {
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 0.75rem;
         }
 
-        .controls label {
-            font-weight: bold;
-            margin-bottom: 5px;
+        .control-group label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .controls input[type="range"] {
-            width: 80%;
-            -webkit-appearance: none;
+        input[type="range"] {
+            -webkit-appearance: none; appearance: none;
+            width: 90%;
+            max-width: 350px;
             height: 8px;
             border-radius: 5px;
-            background: #d3d3d3;
+            background: rgba(0, 0, 0, 0.2);
             outline: none;
-            opacity: 0.7;
-            -webkit-transition: .2s;
             transition: opacity .2s;
         }
-
-        .controls input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 22px; height: 22px;
             border-radius: 50%;
             background: var(--orange-main);
             cursor: pointer;
+            border: 3px solid var(--white-text);
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: transform 0.2s ease;
         }
-
-        .controls input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
+        input[type="range"]::-moz-range-thumb {
+            width: 22px; height: 22px;
             border-radius: 50%;
             background: var(--orange-main);
             cursor: pointer;
+            border: 3px solid var(--white-text);
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+        input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.1); }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .controls button {
-            background-color: var(--green-dark);
-            color: var(--white-text);
-            padding: 10px 20px;
-            border: 1px solid var(--yellow-text);
-            border-radius: 5px;
-            cursor: pointer;
+        .styled-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
             font-size: 1em;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            min-width: 150px;
         }
-
-        .controls button:hover {
-            background-color: #1e6b3f; /* Slightly darker green */
-            border-color: var(--orange-main);
-        }
-
-        /* Centered download button */
-        #downloadBtn {
+        
+        #upload-button {
             background-color: var(--yellow-text);
             color: var(--green-dark);
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.2em;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            margin: 20px auto 0 auto; /* Centered horizontally */
-            display: block; /* Ensures it takes full width for margin auto to work */
-            display: none; /* Hidden until image is processed */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 1.1em;
+        }
+        #upload-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
+        #resetBtn {
+            background-color: transparent;
+            color: var(--white-text);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        #resetBtn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: var(--white-text);
+        }
+
+        #downloadBtn {
+            background-color: var(--orange-main);
+            color: var(--white-text);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 350px;
+        }
         #downloadBtn:hover {
-            background-color: #ffd700; /* Slightly darker yellow */
+            background-color: var(--orange-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
-        .loading-text {
+        #photoUpload {
             display: none;
-            margin-top: 15px;
-            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>
-            Crie sua foto de perfil<br>
+            Crie sua foto de perfil
             <span class="highlight-text">"Eu Vou!"</span>
         </h1>
         <p>
-            É fácil! Clique no botão abaixo para carregar sua foto. Você poderá ajustá-la e depois baixar com a moldura da 12ª Cruzada Evangelística.
+            Participe da 12ª Cruzada Evangelística! Carregue sua foto e baixe sua imagem personalizada para compartilhar com todos.
         </p>
 
-        <div class="file-upload-wrapper">
-            <input type="file" id="photoUpload" accept="image/*">
-            <button class="file-upload-button">Carregar Minha Foto</button>
-        </div>
-        <p class="loading-text" id="loadingText">Processando sua foto...</p>
-
-        <canvas id="photoCanvas"></canvas>
-
-        <div class="controls">
-            <label for="zoomSlider">Zoom:</label>
-            <input type="range" id="zoomSlider" min="0.1" max="3" step="0.01" value="1" disabled>
-            <button id="resetBtn" disabled>Resetar Posição/Zoom</button>
+        <div class="canvas-container">
+            <canvas id="photoCanvas"></canvas>
         </div>
 
-        <button id="downloadBtn">Baixar Minha Foto com Moldura</button>
+        <div class="action-area">
+            <div id="upload-section">
+                <button id="upload-button" class="styled-button">Carregar Minha Foto</button>
+                <input type="file" id="photoUpload" accept="image/*">
+            </div>
+
+            <div id="loading-section">
+                <div class="loader-container">
+                    <div class="loader"></div>
+                    <p>Processando sua foto...</p>
+                </div>
+            </div>
+
+            <div id="controls-section">
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label for="zoomSlider">Ajuste o Zoom</label>
+                        <input type="range" id="zoomSlider" min="0.5" max="4" step="0.05" value="1">
+                    </div>
+                    <div class="button-group">
+                        <button id="changePhotoBtn" class="styled-button">Trocar Foto</button>
+                        <button id="resetBtn" class="styled-button">Resetar</button>
+                    </div>
+                    <button id="downloadBtn" class="styled-button">Baixar Foto com Moldura</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         const photoUpload = document.getElementById('photoUpload');
+        const uploadButton = document.getElementById('upload-button');
+        const changePhotoBtn = document.getElementById('changePhotoBtn');
+        
+        const uploadSection = document.getElementById('upload-section');
+        const loadingSection = document.getElementById('loading-section');
+        const controlsSection = document.getElementById('controls-section');
+
         const photoCanvas = document.getElementById('photoCanvas');
         const ctx = photoCanvas.getContext('2d');
         const downloadBtn = document.getElementById('downloadBtn');
-        const loadingText = document.getElementById('loadingText');
         const zoomSlider = document.getElementById('zoomSlider');
         const resetBtn = document.getElementById('resetBtn');
 
-        // --- Configuration ---
-        const frameImageSrc = 'frame.png'; // Your provided frame image URL
-        const CANVAS_SIZE = 1000; // Optimal size for the final image
-        // Coordinates for the area where the user's photo should be placed
-        // These are estimated from your original image (1000x1000)
-        const PHOTO_AREA = {
-            x: 0,
-            y: 150, // Starts below the top green band
-            width: 1000,
-            height: 650 // Ends above the bottom green band (1000 - 150 - 200 for bottom band)
-        };
+        const frameImageSrc = 'https://i.imgur.com/Xizwf6p.png';
+        const CANVAS_SIZE = 1000;
+        const PHOTO_AREA = { x: 0, y: 150, width: 1000, height: 650 };
 
-        // --- State Variables ---
         let frameImage = new Image();
-        let userPhoto = new Image(); // This will hold the user's uploaded image
-        let currentImage = { // This object holds the state of the image drawn on canvas
-            img: null, // The actual image object
-            x: 0,
-            y: 0,
-            scale: 1,
-            originalWidth: 0,
-            originalHeight: 0
-        };
+        let userPhoto = new Image();
+        let currentImage = { img: null, x: 0, y: 0, scale: 1, originalWidth: 0, originalHeight: 0 };
+        let baseScale = 1;
         let isDragging = false;
         let lastMouseX, lastMouseY;
 
-        // --- Canvas Setup ---
         photoCanvas.width = CANVAS_SIZE;
         photoCanvas.height = CANVAS_SIZE;
-        ctx.imageSmoothingEnabled = true; // For smoother scaling
+        ctx.imageSmoothingEnabled = true;
 
-        // --- Image Loading ---
-        frameImage.src = frameImageSrc;
-        frameImage.crossOrigin = "anonymous"; // Essential for drawing images from other domains onto canvas without tainting
-        frameImage.onload = () => {
-            console.log("Frame image loaded successfully.");
-            // Draw the canvas immediately after the frame loads
-            drawAll();
-        };
-        frameImage.onerror = () => {
-            console.error("Error loading frame image. Check the URL or CORS settings:", frameImageSrc);
-            alert("Não foi possível carregar a moldura. Por favor, entre em contato com a organização do evento.");
-        };
+        function setUIState(state) {
+            uploadSection.style.display = (state === 'initial') ? 'flex' : 'none';
+            loadingSection.style.display = (state === 'loading') ? 'block' : 'none';
+            controlsSection.style.display = (state === 'editing') ? 'block' : 'none';
+        }
 
-        // --- Drawing Function ---
         function drawAll() {
-            ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE); // Clear canvas
-
-            // Fill the photo area with white before drawing the user's image
+            // Fill background with white first to ensure no transparency in the final image.
             ctx.fillStyle = 'white';
-            ctx.fillRect(PHOTO_AREA.x, PHOTO_AREA.y, PHOTO_AREA.width, PHOTO_AREA.height);
+            ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
             if (currentImage.img) {
-                // Calculate scaled dimensions of the user's photo
                 const scaledWidth = currentImage.originalWidth * currentImage.scale;
                 const scaledHeight = currentImage.originalHeight * currentImage.scale;
-
-                // Draw the user's photo based on its current position and scale
-                ctx.drawImage(
-                    currentImage.img,
-                    currentImage.x,
-                    currentImage.y,
-                    scaledWidth,
-                    scaledHeight
-                );
+                ctx.drawImage(currentImage.img, currentImage.x, currentImage.y, scaledWidth, scaledHeight);
+            } else {
+                // Draw a placeholder if no image is loaded
+                ctx.fillStyle = '#EAEAEA';
+                ctx.fillRect(PHOTO_AREA.x, PHOTO_AREA.y, PHOTO_AREA.width, PHOTO_AREA.height);
+                ctx.fillStyle = '#AAAAAA';
+                ctx.font = 'bold 30px Montserrat';
+                ctx.textAlign = 'center';
+                ctx.fillText('Sua foto aparecerá aqui', CANVAS_SIZE / 2, CANVAS_SIZE / 2);
             }
 
-            // Draw the transparent frame on top of everything
             if (frameImage.complete && frameImage.naturalWidth > 0) {
                 ctx.drawImage(frameImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
             }
         }
 
-        // --- Initial Photo Fit Calculation ---
         function calculateInitialFit() {
             const photoAspectRatio = currentImage.originalWidth / currentImage.originalHeight;
             const targetAspectRatio = PHOTO_AREA.width / PHOTO_AREA.height;
+            
+            baseScale = (photoAspectRatio > targetAspectRatio)
+                ? PHOTO_AREA.height / currentImage.originalHeight
+                : PHOTO_AREA.width / currentImage.originalWidth;
 
-            let initialScale;
-            if (photoAspectRatio > targetAspectRatio) {
-                // Photo is wider than the target area, fit by height
-                initialScale = PHOTO_AREA.height / currentImage.originalHeight;
-            } else {
-                // Photo is taller or same aspect ratio, fit by width
-                initialScale = PHOTO_AREA.width / currentImage.originalWidth;
-            }
-
-            const scaledWidth = currentImage.originalWidth * initialScale;
-            const scaledHeight = currentImage.originalHeight * initialScale;
-
-            currentImage.scale = initialScale;
+            currentImage.scale = baseScale; // Synchronize scale to fix zoom snap bug
+            const scaledWidth = currentImage.originalWidth * baseScale;
+            const scaledHeight = currentImage.originalHeight * baseScale;
             currentImage.x = PHOTO_AREA.x + (PHOTO_AREA.width - scaledWidth) / 2;
             currentImage.y = PHOTO_AREA.y + (PHOTO_AREA.height - scaledHeight) / 2;
-
-            zoomSlider.value = initialScale; // Update slider to match initial scale
+            
+            zoomSlider.value = 1;
         }
 
-        // --- Event Listeners ---
-
-        // User Photo Upload
-        photoUpload.addEventListener('change', (event) => {
+        const handleFileSelect = (event) => {
             const file = event.target.files[0];
             if (file) {
-                loadingText.style.display = 'block';
-                downloadBtn.style.display = 'none';
-                zoomSlider.disabled = true;
-                resetBtn.disabled = true;
-
+                setUIState('loading');
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     userPhoto.src = e.target.result;
@@ -341,138 +370,83 @@
                         currentImage.img = userPhoto;
                         currentImage.originalWidth = userPhoto.naturalWidth;
                         currentImage.originalHeight = userPhoto.naturalHeight;
-
-                        calculateInitialFit(); // Position and scale initially
-                        drawAll(); // Draw the image with frame
-
-                        loadingText.style.display = 'none';
-                        downloadBtn.style.display = 'block';
-                        zoomSlider.disabled = false;
-                        resetBtn.disabled = false;
+                        calculateInitialFit();
+                        drawAll();
+                        setUIState('editing');
                     };
                     userPhoto.onerror = () => {
-                        loadingText.style.display = 'none';
+                        setUIState('initial');
                         alert("Não foi possível carregar sua foto. Por favor, tente uma imagem diferente.");
                     };
                 };
                 reader.readAsDataURL(file);
             }
-        });
+            event.target.value = '';
+        };
 
-        // Canvas Dragging (Mouse)
-        photoCanvas.addEventListener('mousedown', (e) => {
-            if (!currentImage.img) return; // Only drag if an image is loaded
-            isDragging = true;
-            photoCanvas.classList.add('dragging');
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
-        });
+        photoUpload.addEventListener('change', handleFileSelect);
+        uploadButton.addEventListener('click', () => photoUpload.click());
+        changePhotoBtn.addEventListener('click', () => photoUpload.click());
 
-        photoCanvas.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - lastMouseX;
-            const dy = e.clientY - lastMouseY;
-            currentImage.x += dx;
-            currentImage.y += dy;
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
-            drawAll();
-        });
+        photoCanvas.addEventListener('mousedown', e => { if (!currentImage.img) return; isDragging = true; photoCanvas.classList.add('dragging'); lastMouseX = e.clientX; lastMouseY = e.clientY; });
+        photoCanvas.addEventListener('mousemove', e => { if (!isDragging) return; const dx = e.clientX - lastMouseX; const dy = e.clientY - lastMouseY; currentImage.x += dx; currentImage.y += dy; lastMouseX = e.clientX; lastMouseY = e.clientY; drawAll(); });
+        photoCanvas.addEventListener('mouseup', () => { isDragging = false; photoCanvas.classList.remove('dragging'); });
+        photoCanvas.addEventListener('mouseleave', () => { isDragging = false; photoCanvas.classList.remove('dragging'); });
+        photoCanvas.addEventListener('touchstart', e => { if (!currentImage.img || e.touches.length !== 1) return; e.preventDefault(); isDragging = true; photoCanvas.classList.add('dragging'); lastMouseX = e.touches[0].clientX; lastMouseY = e.touches[0].clientY; });
+        photoCanvas.addEventListener('touchmove', e => { if (!isDragging || e.touches.length !== 1) return; e.preventDefault(); const dx = e.touches[0].clientX - lastMouseX; const dy = e.touches[0].clientY - lastMouseY; currentImage.x += dx; currentImage.y += dy; lastMouseX = e.touches[0].clientX; lastMouseY = e.touches[0].clientY; drawAll(); });
+        photoCanvas.addEventListener('touchend', () => { isDragging = false; photoCanvas.classList.remove('dragging'); });
 
-        photoCanvas.addEventListener('mouseup', () => {
-            isDragging = false;
-            photoCanvas.classList.remove('dragging');
-        });
-
-        photoCanvas.addEventListener('mouseleave', () => {
-            isDragging = false;
-            photoCanvas.classList.remove('dragging');
-        });
-
-        // Canvas Dragging (Touch)
-        photoCanvas.addEventListener('touchstart', (e) => {
-            if (!currentImage.img || e.touches.length !== 1) return; // Only drag with one finger
-            e.preventDefault(); // Prevent scrolling
-            isDragging = true;
-            photoCanvas.classList.add('dragging');
-            lastMouseX = e.touches[0].clientX;
-            lastMouseY = e.touches[0].clientY;
-        });
-
-        photoCanvas.addEventListener('touchmove', (e) => {
-            if (!isDragging || e.touches.length !== 1) return;
-            e.preventDefault(); // Prevent scrolling
-            const dx = e.touches[0].clientX - lastMouseX;
-            const dy = e.touches[0].clientY - lastMouseY;
-            currentImage.x += dx;
-            currentImage.y += dy;
-            lastMouseX = e.touches[0].clientX;
-            lastMouseY = e.touches[0].clientY;
-            drawAll();
-        });
-
-        photoCanvas.addEventListener('touchend', () => {
-            isDragging = false;
-            photoCanvas.classList.remove('dragging');
-        });
-
-        // Zoom Slider
-        zoomSlider.addEventListener('input', (e) => {
+        zoomSlider.addEventListener('input', e => {
             if (!currentImage.img) return;
-            const newScale = parseFloat(e.target.value);
+            const oldScale = currentImage.scale;
+            const newMultiplier = parseFloat(e.target.value);
+            const newScale = baseScale * newMultiplier;
+            
+            const currentImgCenterX = currentImage.x + (currentImage.originalWidth * oldScale) / 2;
+            const currentImgCenterY = currentImage.y + (currentImage.originalHeight * oldScale) / 2;
 
-            // Calculate current center of the image on canvas
-            const currentImgCenterX = currentImage.x + (currentImage.originalWidth * currentImage.scale) / 2;
-            const currentImgCenterY = currentImage.y + (currentImage.originalHeight * currentImage.scale) / 2;
-
-            // Calculate new dimensions
             const newScaledWidth = currentImage.originalWidth * newScale;
             const newScaledHeight = currentImage.originalHeight * newScale;
 
-            // Adjust x, y to keep the center point fixed during zoom
             currentImage.x = currentImgCenterX - newScaledWidth / 2;
             currentImage.y = currentImgCenterY - newScaledHeight / 2;
-
             currentImage.scale = newScale;
+            
             drawAll();
         });
-
-        // Zoom with Mouse Wheel
-        photoCanvas.addEventListener('wheel', (e) => {
+        
+        photoCanvas.addEventListener('wheel', e => {
             if (!currentImage.img) return;
-            e.preventDefault(); // Prevent page scrolling
+            e.preventDefault();
 
-            const scaleAmount = 0.1;
-            const mouseX = e.clientX - photoCanvas.getBoundingClientRect().left;
-            const mouseY = e.clientY - photoCanvas.getBoundingClientRect().top;
+            const rect = photoCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
 
-            let newScale = currentImage.scale;
-            if (e.deltaY < 0) { // Zoom in
-                newScale += scaleAmount;
-            } else { // Zoom out
-                newScale -= scaleAmount;
+            const oldScale = currentImage.scale;
+            const scaleAmount = e.deltaY < 0 ? 1.1 : 0.9;
+            const newScale = oldScale * scaleAmount;
+
+            const newMultiplier = newScale / baseScale;
+            
+            // Clamp the zoom to the slider's min/max
+            if (newMultiplier < zoomSlider.min || newMultiplier > zoomSlider.max) {
+                return;
             }
 
-            // Clamp scale to slider min/max
-            newScale = Math.max(parseFloat(zoomSlider.min), Math.min(parseFloat(zoomSlider.max), newScale));
-
-            // Adjust x, y to zoom towards the mouse pointer
-            currentImage.x = mouseX - ((mouseX - currentImage.x) * (newScale / currentImage.scale));
-            currentImage.y = mouseY - ((mouseY - currentImage.y) * (newScale / currentImage.scale));
-
+            // Zoom to mouse position
+            currentImage.x = mouseX - (mouseX - currentImage.x) * scaleAmount;
+            currentImage.y = mouseY - (mouseY - currentImage.y) * scaleAmount;
             currentImage.scale = newScale;
-            zoomSlider.value = newScale; // Update slider position
+
+            // Update slider to reflect the new zoom level
+            zoomSlider.value = newMultiplier;
+
             drawAll();
         });
 
-        // Reset Button
-        resetBtn.addEventListener('click', () => {
-            if (!currentImage.img) return;
-            calculateInitialFit();
-            drawAll();
-        });
-
-        // Download Button
+        resetBtn.addEventListener('click', () => { if (currentImage.img) { calculateInitialFit(); drawAll(); } });
+        
         downloadBtn.addEventListener('click', () => {
             if (!currentImage.img) {
                 alert("Por favor, carregue uma foto primeiro!");
@@ -481,18 +455,19 @@
             const dataURL = photoCanvas.toDataURL('image/png');
             const a = document.createElement('a');
             a.href = dataURL;
-            a.download = 'minha_foto_cruzada_evangelistica.png';
+            a.download = 'EuVou-CruzadaEvangelistica.png';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
         });
 
-        // Initial draw when the page loads (or after frame image loads)
-        // This ensures the frame is visible immediately.
-        if (frameImage.complete && frameImage.naturalWidth > 0) {
-            drawAll();
-        }
-        // If frameImage is not yet complete, the onload handler will call drawAll()
+        frameImage.src = frameImageSrc;
+        frameImage.crossOrigin = "anonymous";
+        frameImage.onload = () => { console.log("Frame image loaded."); drawAll(); };
+        frameImage.onerror = () => { console.error("Error loading frame image."); alert("Não foi possível carregar a moldura. Tente recarregar a página."); };
+        
+        setUIState('initial');
+
     </script>
 </body>
 </html>
