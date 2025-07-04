@@ -240,9 +240,9 @@
 
         // --- State Variables ---
         let frameImage = new Image();
-        let userPhoto = new Image();
-        let currentImage = {
-            img: null,
+        let userPhoto = new Image(); // This will hold the user's uploaded image
+        let currentImage = { // This object holds the state of the image drawn on canvas
+            img: null, // The actual image object
             x: 0,
             y: 0,
             scale: 1,
@@ -262,10 +262,8 @@
         frameImage.crossOrigin = "anonymous"; // Essential for drawing images from other domains onto canvas without tainting
         frameImage.onload = () => {
             console.log("Frame image loaded successfully.");
-            // If a user photo is already loaded, redraw with the frame
-            if (currentImage.img) {
-                drawAll();
-            }
+            // Draw the canvas immediately after the frame loads
+            drawAll();
         };
         frameImage.onerror = () => {
             console.error("Error loading frame image. Check the URL or CORS settings:", frameImageSrc);
@@ -488,6 +486,13 @@
             a.click();
             document.body.removeChild(a);
         });
+
+        // Initial draw when the page loads (or after frame image loads)
+        // This ensures the frame is visible immediately.
+        if (frameImage.complete && frameImage.naturalWidth > 0) {
+            drawAll();
+        }
+        // If frameImage is not yet complete, the onload handler will call drawAll()
     </script>
 </body>
 </html>
